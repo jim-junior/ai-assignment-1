@@ -1,7 +1,7 @@
 import heapq
 
-# Define the graph as in the previous answers
-graph = {
+# Define the graph with new variable names
+new_graph = {
     'S': {'neighbors': {'A': 3, 'B': 1}, 'heuristic': 7},
     'A': {'neighbors': {'B': 2, 'C': 2}, 'heuristic': 5},
     'B': {'neighbors': {'C': 3}, 'heuristic': 7},
@@ -11,7 +11,7 @@ graph = {
 }
 
 # Depth-First Search (Tree Search)
-def depth_first_search_tree(graph, start, goal):
+def depth_first_search_tree(new_graph, start, goal):
     stack = [(start, [])]
     visited = set()
     expanded_states = []
@@ -24,15 +24,15 @@ def depth_first_search_tree(graph, start, goal):
                 "Depth-First Search (Tree Search):",
                 expanded_states,
                 path + [node],
-                list(set(graph.keys()) - set(expanded_states))
+                list(set(new_graph.keys()) - set(expanded_states))
             )
         if node not in visited:
             visited.add(node)
-            neighbors = [neighbor for neighbor in graph[node]['neighbors']]
-            stack.extend((neighbor, path + [node]) for neighbor in reversed(neighbors) if neighbor not in visited)
+            neighbors = [n for n in new_graph[node]['neighbors']]
+            stack.extend((n, path + [node]) for n in neighbors if n not in visited)
 
 # Breadth-First Search (Tree Search)
-def breadth_first_search_tree(graph, start, goal):
+def breadth_first_search_tree(new_graph, start, goal):
     queue = [(start, [])]
     visited = set()
     expanded_states = []
@@ -45,15 +45,15 @@ def breadth_first_search_tree(graph, start, goal):
                 "Breadth-First Search (Tree Search):",
                 expanded_states,
                 path + [node],
-                list(set(graph.keys()) - set(expanded_states))
+                list(set(new_graph.keys()) - set(expanded_states))
             )
         if node not in visited:
             visited.add(node)
-            neighbors = [neighbor for neighbor in graph[node]['neighbors']]
-            queue.extend((neighbor, path + [node]) for neighbor in neighbors if neighbor not in visited)
+            neighbors = [n for n in new_graph[node]['neighbors']]
+            queue.extend((n, path + [node]) for n in neighbors if n not in visited)
 
 # Uniform Cost Search (Tree Search)
-def uniform_cost_search_tree(graph, start, goal):
+def uniform_cost_search_tree(new_graph, start, goal):
     priority_queue = [(0, start, [])]
     visited = set()
     expanded_states = []
@@ -66,17 +66,17 @@ def uniform_cost_search_tree(graph, start, goal):
                 "Uniform Cost Search (Tree Search):",
                 expanded_states,
                 path + [node],
-                list(set(graph.keys()) - set(expanded_states))
+                list(set(new_graph.keys()) - set(expanded_states))
             )
         if node not in visited:
             visited.add(node)
-            neighbors = [(neighbor, cost + graph[node]['neighbors'][neighbor]) for neighbor in graph[node]['neighbors']]
-            for neighbor, new_cost in neighbors:
-                heapq.heappush(priority_queue, (new_cost, neighbor, path + [node]))
+            neighbors = [(n, cost + new_graph[node]['neighbors'][n]) for n in new_graph[node]['neighbors']]
+            for n, new_cost in neighbors:
+                heapq.heappush(priority_queue, (new_cost, n, path + [node]))
 
 # Greedy Search (Tree Search)
-def greedy_search_tree(graph, start, goal):
-    priority_queue = [(graph[start]['heuristic'], start, [])]
+def greedy_search_tree(new_graph, start, goal):
+    priority_queue = [(new_graph[start]['heuristic'], start, [])]
     visited = set()
     expanded_states = []
 
@@ -88,16 +88,16 @@ def greedy_search_tree(graph, start, goal):
                 "Greedy Search (Tree Search):",
                 expanded_states,
                 path + [node],
-                list(set(graph.keys()) - set(expanded_states))
+                list(set(new_graph.keys()) - set(expanded_states))
             )
         if node not in visited:
             visited.add(node)
-            neighbors = [neighbor for neighbor in graph[node]['neighbors']]
-            priority_queue.extend((graph[neighbor]['heuristic'], neighbor, path + [node]) for neighbor in neighbors if neighbor not in visited)
+            neighbors = [n for n in new_graph[node]['neighbors']]
+            priority_queue.extend((new_graph[n]['heuristic'], n, path + [node]) for n in neighbors if n not in visited)
 
 # A* Search (Tree Search)
-def a_star_search_tree(graph, start, goal):
-    priority_queue = [(graph[start]['heuristic'], 0, start, [])]
+def a_star_search_tree(new_graph, start, goal):
+    priority_queue = [(new_graph[start]['heuristic'], 0, start, [])]
     visited = set()
     expanded_states = []
 
@@ -109,13 +109,13 @@ def a_star_search_tree(graph, start, goal):
                 "A* Search (Tree Search):",
                 expanded_states,
                 path + [node],
-                list(set(graph.keys()) - set(expanded_states))
+                list(set(new_graph.keys()) - set(expanded_states))
             )
         if node not in visited:
             visited.add(node)
-            neighbors = [(neighbor, cost_so_far + graph[node]['neighbors'][neighbor]) for neighbor in graph[node]['neighbors']]
-            for neighbor, new_cost in neighbors:
-                heapq.heappush(priority_queue, (new_cost + graph[neighbor]['heuristic'], new_cost, neighbor, path + [node]))
+            neighbors = [(n, cost_so_far + new_graph[node]['neighbors'][n]) for n in new_graph[node]['neighbors']]
+            for n, new_cost in neighbors:
+                heapq.heappush(priority_queue, (new_cost + new_graph[n]['heuristic'], new_cost, n, path + [node]))
 
 # Format and print results
 def print_search_results(result):
@@ -124,11 +124,11 @@ def print_search_results(result):
 
 # Test the search algorithms for Tree Search
 goal_state = 'G'
-dfs_result = depth_first_search_tree(graph, 'S', goal_state)
-bfs_result = breadth_first_search_tree(graph, 'S', goal_state)
-ucs_result = uniform_cost_search_tree(graph, 'S', goal_state)
-greedy_result = greedy_search_tree(graph, 'S', goal_state)
-a_star_result = a_star_search_tree(graph, 'S', goal_state)
+dfs_result = depth_first_search_tree(new_graph, 'S', goal_state)
+bfs_result = breadth_first_search_tree(new_graph, 'S', goal_state)
+ucs_result = uniform_cost_search_tree(new_graph, 'S', goal_state)
+greedy_result = greedy_search_tree(new_graph, 'S', goal_state)
+a_star_result = a_star_search_tree(new_graph, 'S', goal_state)
 
 # Print results
 print_search_results(dfs_result)
